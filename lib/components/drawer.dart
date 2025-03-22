@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:temp/services/auth/auth_services.dart';
 import 'package:temp/pages/settings.dart';
 
-class MyDrawer extends StatelessWidget{
+class MyDrawer extends StatelessWidget {
+  final String userEmail;
+
+  
+  MyDrawer({required this.userEmail});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -10,46 +15,64 @@ class MyDrawer extends StatelessWidget{
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-        // logo
-        Column(
-          children: [
-            Center(
-          child: DrawerHeader(child: Icon(Icons.chat, size: 40, color: Theme.of(context).colorScheme.primary),)
-        ),
+          // logo and user email
+          Column(
+            children: [
+              Center(
+                child: DrawerHeader(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.chat, size: 40, color: Theme.of(context).colorScheme.primary),
+                      SizedBox(height: 10),
+                      Text(
+                        userEmail,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          letterSpacing: 1.2,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
-        // home
-        Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: ListTile(
-              title: Text('H O M E',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold)),
-              leading: Icon(Icons.home,
-                  color: Theme.of(context).colorScheme.primary),
-              onTap: (){
-              Navigator.pop(context);
-            }
-            ),
-          ),
+              // home
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListTile(
+                  title: Text('H O M E',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold)),
+                  leading: Icon(Icons.home,
+                      color: Theme.of(context).colorScheme.primary),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
 
-          // settings
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: ListTile(
-              title: Text('S E T T I N G S',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      fontWeight: FontWeight.bold)),
-              leading: Icon(Icons.settings,
-                  color: Theme.of(context).colorScheme.primary),
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> SettingsPage(ontap:(){})));
-              },
-            ),
+              // settings
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListTile(
+                  title: Text('S E T T I N G S',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold)),
+                  leading: Icon(Icons.settings,
+                      color: Theme.of(context).colorScheme.primary),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage(ontap: () {})));
+                  },
+                ),
+              ),
+            ],
           ),
-          ],
-        ),
 
           // logout
           Padding(
@@ -63,14 +86,16 @@ class MyDrawer extends StatelessWidget{
                   color: Theme.of(context).colorScheme.primary),
               onTap: () {
                 Authentication auth = Authentication();
-                try{auth.signout();}
-                on Exception catch(e){
+                try {
+                  auth.signout();
+                } on Exception catch (e) {
                   print(e);
                 }
               },
             ),
           ),
-      ],),
+        ],
+      ),
     );
   }
 }

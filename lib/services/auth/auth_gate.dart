@@ -11,7 +11,9 @@ class AuthGate extends StatelessWidget{
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if(snapshot.hasData) {
-            return HomePage(ontap: (){});
+            return HomePage(
+              userEmail: FirebaseAuth.instance.currentUser?.email ?? 'Unknown',
+            );
           } else {
             return Login_Register();
           }

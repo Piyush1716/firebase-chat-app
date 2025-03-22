@@ -16,14 +16,15 @@ class LoginPage extends StatelessWidget {
     try{
       User? user = await auth.signin(email_cnt.text, pw_cnt.text);
       if(user != null){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(ontap: ontap,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(userEmail: email_cnt.text,)));
       }
       else{
         showDialog(context: context, builder: (context)=> AlertDialog(title: Text('Login Error'),));
       }
     }
     on FirebaseAuthException catch(e){
-      showDialog(context: context, builder: (context)=> AlertDialog(title: Text('Error'),));
+      print(e);
+      showDialog(context: context, builder: (context)=> AlertDialog(title: Text(e.toString()),));
     }
   }
 

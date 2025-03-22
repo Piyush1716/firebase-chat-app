@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:temp/moduls/massage.dart';
 import 'package:temp/services/auth/auth_services.dart';
 
 class ChatServices {
   // instance of firestore, authenticaion
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  // final Authentication _auth = Authentication();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Authentication _auth = Authentication();
   // get user stream
 
   /*
@@ -37,8 +35,8 @@ class ChatServices {
   // send msg
   Future<void> sendMsg(String receiverId, msg) async{
     // get cur user
-    final curUserId = _auth.currentUser!.uid;
-    final curUserEmail = _auth.currentUser!.email!;
+    final curUserId = _auth.getCurrentUser()!.uid;
+    final curUserEmail = _auth.getCurrentUser()!.email!;
     final Timestamp time = Timestamp.now();
 
     // create new msg
@@ -60,7 +58,7 @@ class ChatServices {
   }
 
   // get msgs
-  Stream<QuerySnapshot> getMassaeges(String curUserId, otherUserId){
+  Stream<QuerySnapshot> getMessages(String curUserId, otherUserId){
     List<String> users = [curUserId, otherUserId];
     users.sort();
     String roomId = users.join('_');

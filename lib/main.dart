@@ -18,10 +18,12 @@ void main() async{
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AuthGate(),
-      theme: Provider.of<ThemeProvider>(context).themeData,
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AuthGate(),
+        theme: themeProvider.themeData,
+      ),
     );
   }
 }

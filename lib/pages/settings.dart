@@ -39,9 +39,11 @@ class SettingsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Dark Mode'),
-            CupertinoSwitch(
-              value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode, 
-              onChanged: (value)=> Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
+            Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) => CupertinoSwitch(
+                value: themeProvider.isDarkMode, 
+                onChanged: (value)=> themeProvider.toggleTheme(),
+              ),
             )
           ],
         ),

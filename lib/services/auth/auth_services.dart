@@ -7,7 +7,7 @@ class Authentication{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // get current user
-  User? getCureUser() => _auth.currentUser;
+  User? getCurrentUser() => _auth.currentUser;
 
   // signin
   Future<User?> signin (String email, pass) async{

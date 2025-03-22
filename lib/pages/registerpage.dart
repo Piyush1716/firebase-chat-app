@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:temp/services/auth/auth_services.dart';
 import 'package:temp/components/buttons.dart';
@@ -18,7 +17,7 @@ class RegisterPage extends StatelessWidget {
         await auth.signup(email_cnt.text, pw_cnt.text, cfpw_cnt.text);
       }
       on Exception catch(e){
-      showDialog(context: context, builder: (context)=> AlertDialog(title: Text(e.toString()),));
+        showDialog(context: context, builder: (context)=> AlertDialog(title: Text(e.toString()),));
       }
     }
     else{

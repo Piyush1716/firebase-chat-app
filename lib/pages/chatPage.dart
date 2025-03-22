@@ -8,11 +8,11 @@ import 'package:temp/services/auth/auth_services.dart';
 import 'package:temp/services/chat/chat_services.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receiveremail;
+  final String receiverEmail;
   final String receiverId;
   ChatPage({
     super.key,
-    required this.receiveremail, 
+    required this.receiverEmail, 
     required this.receiverId
   });
 
@@ -22,58 +22,50 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _msgcnt = TextEditingController();
-
   final ChatServices _chatServices = ChatServices();
-
-  final Authentication _authServices = Authentication(); 
-
+  final Authentication _authServices = Authentication();
+  final ScrollController _scrollController = ScrollController();
   FocusNode myFocusNode = FocusNode();
 
-  void initState(){
+  @override
+  void initState() {
     super.initState();
 
-    // add listner to focusnode
-    myFocusNode.addListener((){
-      // add delay so that keyboard has time to show up
-      // then the amount of remaining space in the listview is calculated
-      //then scroll to the end of the list 
-      if(myFocusNode.hasFocus){
-        Future.delayed(
-          Duration(milliseconds: 500),
-          () => scrolldown(),
-        );
+    // Add listener to focusNode to scroll down when keyboard opens
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        Future.delayed(Duration(milliseconds: 500), () => scrolldown());
       }
     });
 
-    Future.delayed(Duration(milliseconds: 500), () => scrolldown());  
+    // Scroll down when the page is loaded
+    Future.delayed(Duration(milliseconds: 500), () => scrolldown());
   }
 
-
-  void dispose(){
+  @override
+  void dispose() {
     myFocusNode.dispose();
     _msgcnt.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
-  //  scroll controller
-  final ScrollController _scrollController = ScrollController();
-  void scrolldown(){
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(seconds: 1),
-      curve: Curves.easeOut,
-    );
+  void scrolldown() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
-  // send message
-  void sendmsg() async{
-    if(_msgcnt.text.isNotEmpty){
+  void sendmsg() async {
+    if (_msgcnt.text.isNotEmpty) {
       await _chatServices.sendMsg(widget.receiverId, _msgcnt.text);
-
-      // after sending msg clear the textfield
       _msgcnt.clear();
     }
-    scrolldown();
+    scrolldown(); // Ensure scrolling after sending message
   }
 
   @override
@@ -81,7 +73,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(widget.receiveremail),
+        title: Text(widget.receiverEmail),
       ),
       body: Column(children: [
         // display all the massages
@@ -93,35 +85,40 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildmsgList(){
-    String senderId = _authServices.getCureUser()!.uid;
+  Widget _buildmsgList() {
+    String senderId = _authServices.getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: _chatServices.getMassaeges(senderId, widget.receiverId), 
-      builder: (context, snapshot){
-        if(snapshot.hasError){
-          return Center(child: Text('Error loading massages'));
+      stream: _chatServices.getMessages(senderId, widget.receiverId),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('Error loading messages'));
         }
-
-        if(snapshot.connectionState == ConnectionState.waiting){
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
-
-        if(!snapshot.hasData || snapshot.data!.docs.isEmpty){
-          return Center(child: Text('No massages found'));
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No messages found'));
         }
 
-        return ListView(
+        // Scroll to the bottom when messages are updated
+        WidgetsBinding.instance.addPostFrameCallback((_) => scrolldown());
+
+        return ListView.builder(
+          reverse: false, // Shows latest messages at the bottom
           controller: _scrollController,
-          children: snapshot.data!.docs.map<Widget>((msg) => _buildmsgItem(msg)).toList()
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            return _buildmsgItem(snapshot.data!.docs[index]);
+          },
         );
-      }
+      },
     );
   }
 
   Widget _buildmsgItem(DocumentSnapshot doc) {
     Map<String, dynamic> msg = doc.data() as Map<String, dynamic>;
-    bool curUser = msg['senderId'] == _authServices.getCureUser()!.uid;
+    bool curUser = msg['senderId'] == _authServices.getCurrentUser()!.uid;
     var alignment = curUser ? Alignment.centerRight : Alignment.centerLeft;
 
     return Container(
