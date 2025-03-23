@@ -10,9 +10,11 @@ class ChatBubble extends StatelessWidget {
     required this.isCurrentUser,
     this.timestamp,
   });
-
-  @override
+@override
   Widget build(BuildContext context) {
+    // Get theme colors
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Align(
       alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Padding(
@@ -29,8 +31,8 @@ class ChatBubble extends StatelessWidget {
                     maxWidth: MediaQuery.of(context).size.width * 0.7),
                 decoration: BoxDecoration(
                   color: isCurrentUser
-                      ? Colors.green.shade400
-                      : Colors.grey.shade400,
+                      ? colorScheme.primary // Current user color
+                      : colorScheme.secondary, // Other user color
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
@@ -43,8 +45,9 @@ class ChatBubble extends StatelessWidget {
                 child: Text(
                   message,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: colorScheme.onPrimary, // Ensures contrast
                     fontSize: 16,
+                    fontWeight: FontWeight.w100,
                   ),
                 ),
               ),
@@ -54,7 +57,7 @@ class ChatBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   timestamp!,
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 12, color: colorScheme.onSurface),
                 ),
               ),
           ],

@@ -46,6 +46,7 @@ class MyDrawer extends StatelessWidget {
                 child: ListTile(
                   title: Text('H O M E',
                       style: TextStyle(
+                          fontFamily: 'lufga',
                           color: Theme.of(context).colorScheme.inversePrimary,
                           fontWeight: FontWeight.bold)),
                   leading: Icon(Icons.home,
@@ -62,6 +63,7 @@ class MyDrawer extends StatelessWidget {
                 child: ListTile(
                   title: Text('S E T T I N G S',
                       style: TextStyle(
+                          fontFamily: 'lufga',
                           color: Theme.of(context).colorScheme.inversePrimary,
                           fontWeight: FontWeight.bold)),
                   leading: Icon(Icons.settings,
@@ -80,6 +82,7 @@ class MyDrawer extends StatelessWidget {
             child: ListTile(
               title: Text('L O G O U T',
                   style: TextStyle(
+                      fontFamily: 'lufga',
                       color: Theme.of(context).colorScheme.inversePrimary,
                       fontWeight: FontWeight.bold)),
               leading: Icon(Icons.logout,

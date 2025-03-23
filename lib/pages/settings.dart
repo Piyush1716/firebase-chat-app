@@ -17,9 +17,11 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text('SETTINGS'),
+        title: Text('SETTINGS',style: TextStyle(fontFamily: 'lufga'),),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

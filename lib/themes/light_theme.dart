@@ -47,15 +47,23 @@ ThemeData lightTheme = ThemeData(
   // Text Theme
   textTheme: TextTheme(
     displayLarge: TextStyle(
+        fontFamily: "Satoshi",
         fontSize: 26,
         fontWeight: FontWeight.bold,
         color: Color(0xFF1B3A4B)), // Dark Blue
     displayMedium: TextStyle(
+        fontFamily: "Satoshi",
         fontSize: 22,
         fontWeight: FontWeight.bold,
         color: Color(0xFF2C6E49)), // Deep Green
-    bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF1B3A4B)), // Dark Blue
-    bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF2C6E49)), // Deep Green
+    bodyLarge: TextStyle(
+        fontFamily: "Satoshi",
+        fontSize: 16,
+        color: Color(0xFF1B3A4B)), // Dark Blue
+    bodyMedium: TextStyle(
+        fontFamily: "Satoshi",
+        fontSize: 14,
+        color: Color(0xFF2C6E49)), // Deep Green
   ),
 
   // Input Decoration Theme (for chat text fields, forms, etc.)
